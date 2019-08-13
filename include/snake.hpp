@@ -1,9 +1,9 @@
 #include <iostream>
 #include "food.hpp"
+#include "things.hpp"
 #include <SFML/Graphics.hpp>
 using namespace std;
 
-#include "things.hpp"
 // class snake{
 
 // 	public:
@@ -41,8 +41,29 @@ class snake{
 			this->ss.setFillColor(sf::Color(100, 250, 50));
 		}
 
-		void move(enum dir){
+		const sf::Vector2f & pos (void){
+			return ss.getPosition();
+		}
 
+		void move(enum direction dir){
+
+			switch(dir){
+				case LEFT:
+					this->ss.move(-100.f,0.f);
+					break;
+				
+				case RIGHT:
+					this->ss.move(100.f, 0.f);
+					break;
+				
+				case UP:
+					this->ss.move(0.f, -100.f);
+					break;
+				
+				case DOWN:
+					this->ss.move(0.f, 100.f);
+					break;
+			}
 		}
 
 

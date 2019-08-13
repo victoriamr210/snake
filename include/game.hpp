@@ -19,7 +19,7 @@ class game{
 		// sf::RectangleShape food(sf::Vector2f(120.f, 50.f));
 
 		game(){
-			this->window.create(sf::VideoMode(800, 600), "game");
+			this->window.create(sf::VideoMode(800, 800), "game");
 		}
 
 		void drawGame(void){
@@ -27,47 +27,38 @@ class game{
 			window.draw(fod.f);
 		}
 
-		void input(void){
-			sf::Event event;
+		void input(sf:: Event event){
 
 			switch(event.key.code){
-			case sf::Keyboard::Left:	
-				dir=LEFT;
-				break;
+				case sf::Keyboard::Left:	
+					dir=LEFT;
+					break;
 				
-			case sf::Keyboard::Right:
-				dir=RIGHT;
-				break;
+				case sf::Keyboard::Right:
+					dir=RIGHT;
+					break;
 			
-			case sf::Keyboard::Up:
-				dir=UP;
-				break;
+				case sf::Keyboard::Up:
+					dir=UP;
+					break;
 			
-			case sf::Keyboard::Down:
-				dir=DOWN;
-				break;
-				
-				
-				
-				
-				// if (event.key.code == sf::Keyboard::Left)
-				// {
-				// 	snake.move(-100.f, 0.f);
-				// }
-				// if (event.key.code == sf::Keyboard::Right)
-				// {
-				// 	snake.move(100.f, 0.f);
-				// }
-				// if (event.key.code == sf::Keyboard::Up)
-				// {
-				// 	snake.move(0.f, -100.f);
-				// }
-				// if (event.key.code == sf::Keyboard::Down)
-				// {
-				// 	snake.move(0.f, 100.f);
-				// }
-				// break;
-			}
+				case sf::Keyboard::Down:
+					dir=DOWN;
+					break;
+				}
+
+			snek.move(dir);
+		}
+
+		bool eat(void){
+			bool a= false;
+			if(snek.pos() == fod.pos())
+				a = true;
+			return a;
+		}
+
+		void update(void){
+			fod.update();
 		}
 
 		void gameLoop(void){
@@ -82,12 +73,14 @@ class game{
 					if (event.type == sf::Event::Closed)
 						window.close();
 
-					input();
-
+					if(event.type == sf::Event::KeyPressed)
+						input(event);
 				}
 
 				// clear the window with black color
 				window.clear(sf::Color::Black);
+				if(eat())
+					update();
 
 				// draw everything here...
 				// window.draw(...);
