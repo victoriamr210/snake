@@ -14,7 +14,7 @@ class game{
 		sf::RenderWindow window;
 		snake snek;
 		food fod;
-		direction dir;
+		direction dir=STOP;
 		// sf::RectangleShape snake(sf::Vector2f(120.f, 50.f));
 		// sf::RectangleShape food(sf::Vector2f(120.f, 50.f));
 
@@ -23,7 +23,9 @@ class game{
 		}
 
 		void drawGame(void){
-			window.draw(snek.ss);
+			for(int i=0; i<snek.sn.size(); i++){
+				window.draw(snek.sn[i]);
+			}
 			window.draw(fod.f);
 		}
 
@@ -57,11 +59,16 @@ class game{
 			return a;
 		}
 
-		void update(void){
+		void update(const sf::Vector2f& pos){
 			fod.update();
+			snek.grow(pos);
 		}
 
 		void gameLoop(void){
+
+			sf::Clock clock;
+
+			
 			while (window.isOpen()){
 				// check all the window's events that were triggered since the last iteration of the loop
 				sf::Event event;
@@ -80,11 +87,12 @@ class game{
 				// clear the window with black color
 				window.clear(sf::Color::Black);
 				if(eat())
-					update();
+					update(fod.pos());
 
 				// draw everything here...
 				// window.draw(...);
 				drawGame();
+				snek.move(dir);
 
 				// end the current frame
 				window.display();
