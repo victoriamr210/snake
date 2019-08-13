@@ -22,6 +22,29 @@ class game{
 			this->window.create(sf::VideoMode(800, 800), "game");
 		}
 
+		void lost(void){
+			sf::Font font;
+			if(!font.loadFromFile("/mnt/c/Users/Victoria/Documents/projects/snake/include/Sqaurewave.ttf")){
+				cout << "wellp\n";
+			}
+
+			sf::Text text1;
+			sf::Text text2;
+			sf::Text text3;
+
+			text1.setFont(font);
+			text2.setFont(font);
+			text3.setFont(font);
+
+			text1.setString("YOU LOST");
+			text2.setString("PRESS R TO RESTART");
+			text3.setString("PRESS Q TO QUIT");
+
+			window.draw(text1);
+			window.draw(text2);
+			window.draw(text3);
+		}
+
 		void drawGame(void){
 			for(int i=0; i<snek.sn.size(); i++){
 				window.draw(snek.sn[i]);
@@ -64,11 +87,22 @@ class game{
 			snek.grow(pos);
 		}
 
+
+		bool headpos(void){
+			// bool a=false;
+			if (snek.sn.front().getPosition().x < 0 || snek.sn.front().getPosition().x > 800) 
+				return true;
+			if (snek.sn.front().getPosition().y < 0 || snek.sn.front().getPosition().y > 800) 
+				return true;
+			
+			return false;
+		}
+
 		void gameLoop(void){
 
 			sf::Clock clock;
+			// window.setFramerateLimit(4);
 
-			
 			while (window.isOpen()){
 				// check all the window's events that were triggered since the last iteration of the loop
 				sf::Event event;
@@ -80,8 +114,11 @@ class game{
 					if (event.type == sf::Event::Closed)
 						window.close();
 
-					if(event.type == sf::Event::KeyPressed)
+					if(event.type == sf::Event::KeyPressed){
 						input(event);
+						clock.restart();
+					}
+
 				}
 
 				// clear the window with black color
@@ -91,127 +128,20 @@ class game{
 
 				// draw everything here...
 				// window.draw(...);
+				sf::Time time = clock.getElapsedTime();
+				// clock.getElapsedTime();
+				if(time.asSeconds() > 0.4){
+					snek.move(dir);
+					clock.restart();
+					// if(headpos())
+					// 	lost();
+					
+				}	
 				drawGame();
-				snek.move(dir);
 
 				// end the current frame
 				window.display();
 			}
 		}
 };
-
-// enum Dir {LEFT, RIGHT, DOWN,UP, STOP};
-
-// class game{
-
-// 	public:
-// 		snake snek;
-// 		bool game_over;
-// 		int height = 20;
-// 		int width = 30;
-// 		int fX;
-// 		int fY;
-// 		Dir d =STOP;
-		
-// 	public:
-
-// 		game(){
-// 			game_over = false;
-// 			fX = rand() % 30;
-// 			fY = rand() % 20;
-// 		}	
-
-// 		void setup(){
-
-// 		}
-// 		void board(){
-// 				system("clear");
-
-// 				for(int i =0; i<width; i++){
-// 					cout << "#";
-// 				}
-// 				cout << endl;
-
-// 				for(int i=0; i<height-1; i++){
-// 					cout << "#";
-// 					for (int j=0; j<width-2; j++){
-// 							if(i == snek.headY && j == snek.headX)
-// 								cout << "O";
-// 							else{
-// 								if(i == fY && j == fX)
-// 								cout << "F";
-// 							else
-// 								cout << " ";
-// 							}
-// 					}
-// 					cout  << "#" << endl;
-// 				}
-
-// 				for(int i =0; i<width; i++){
-// 					cout << "#";
-// 				}
-// 				cout << endl;
-
-// 			// game_over=true;
-// 		}
-
-// 		void draw(){
-// 			board();
-
-
-			
-
-// 		}
-
-// 		void logic(){
-// 			switch(d){
-// 				case UP:
-// 					snek.headY--;
-// 					break;
-
-// 				case DOWN:
-// 					snek.headY++;
-// 					break;
-				
-// 				case RIGHT:
-// 					snek.headX++;
-// 					break;
-				
-// 				case LEFT:
-// 					snek.headX--;
-// 				break;
-
-// 			}
-
-// 			if(snek.headX < 0 || snek.headX >= width-2 || snek.headY < 0 || snek.headY >= height-2)
-// 				game_over = true;
-
-				
-// 		}
-
-// 		void input(){
-// 			char key;
-// 			 cin >> key;
-// 			switch(key){
-// 				case 'w':
-// 					d=UP;
-// 					break;
-				
-// 				case 'a':
-// 					d=LEFT;
-// 					break;
-				
-// 				case 's':
-// 					d=DOWN;
-// 					break;
-				
-// 				 case 'd':
-// 				 	d=RIGHT;
-// 				 	break;
-// 			}
-
-
-// 		}
-
-// };
 
